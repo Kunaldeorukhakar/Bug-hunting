@@ -27,7 +27,7 @@ httpx -status-code -title -tech-detect -cl -list allsub.txt -t 100 -o httpx.txt
 
 echo "[*] Fetching all the URLs using katana and performing pattern matching..."
 katana -u allsub.txt -d 5 -ps -pss waybackarchive,commoncrawl,alienvault -kf -jc -fx -ef woff,css,png,svg,jpg,woff2,jpeg,gif,svg -o allurls.txt
-cat allurls.txt | grep -E "\.js$" >> js.txt
+cat allurls.txt | grep -E "\.js$" | anew | tee -a js.txt
 cat allurls.txt | gf xss | tee -a gfxss.txt
 cat allurls.txt | gf sqli | tee -a gfsqli.txt
 cat allurls.txt | gf rce | tee -a gfrce.txt
