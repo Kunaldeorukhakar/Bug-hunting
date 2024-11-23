@@ -18,13 +18,13 @@ echo "[*] Finding secrets from js files..."
 cat js.txt | while read url; do python3 ~/Documents/tools/SecretFinder/SecretFinder.py -i $url -o cli >> secrets.txt; done
 
 echo "[*] Finding secrets from Github ..."
-trufflehog github --org=$target --results=verified | tee -a gitsecrets.txt
+trufflehog github --org=$target --results=verified --no-update | tee -a gitsecrets.txt
 
 echo "[*] Fuzzing for sensitive files/directories..."
 ffuf -u https://$target/FUZZ -w /usr/share/wordlists/WordList/god.txt -e sql,config,xml,json
 
 echo "[*] Finding open ports using rustscan..."
-rustscan -a ips.txt --range 1-1000 --ulimit 3000 -V -- -Pn > nmap.txt
+rustscan -a ips.txt --range 1-1000 --ulimit 3000 -- -Pn | tee -a nmap.txt
 
 echo "[*] Enumerating cloud environment..."
 enumkey="${target%%.*}"
