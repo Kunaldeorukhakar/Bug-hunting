@@ -21,6 +21,6 @@ echo "[*] Scanning for any changes in applications/servers..."
 httpx -status-code -title -tech-detect -cl -list allsub.txt | anew  httpx.txt |tee -a newhttpx_$(date +"%Y%m%d_%H%M%S").txt | notify -pc ~/Documents/BugBounty/$pc | tee -a httpx.txt
 
 echo "[*] Scanning and finding new Github secrets..."
-trufflehog github --org=$target --results=verified --no-update | anew gitsecrets |tee -a newgitsecrets_$(date +"%Y%m%d_%H%M%S").txt | notify -pc ~/Documents/BugBounty/$pc | tee -a gitsecrets.txt
+trufflehog github --org=$target --results=verified --no-update | anew gitsecrets.txt |tee -a newgitsecrets_$(date +"%Y%m%d_%H%M%S").txt | notify -pc ~/Documents/BugBounty/$pc | tee -a gitsecrets.txt
 
 echo "Finished subdomain tracking of $target on $(date)" | notify -pc ~/Documents/BugBounty/$pc
