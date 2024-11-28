@@ -7,6 +7,8 @@ read target
 echo "Enter provider config filename:"
 read pc
 
+org=${target%%.*}
+
 mkdir $program 
 cd $program
 
@@ -18,7 +20,7 @@ echo "[*] Finding secrets from js files..."
 cat js.txt | while read url; do python3 ~/Documents/tools/SecretFinder/SecretFinder.py -i $url -o cli >> secrets.txt; done
 
 echo "[*] Finding secrets from Github ..."
-trufflehog github --org=$target --results=verified --no-update | tee -a gitsecrets.txt
+trufflehog github --org=$org --results=verified --no-update | tee -a gitsecrets.txt
 
 echo "[*] Fuzzing for sensitive files/directories..."
 ffuf -u https://$target/FUZZ -w /usr/share/wordlists/WordList/god.txt -e sql,config,xml,json
