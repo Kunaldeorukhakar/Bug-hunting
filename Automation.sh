@@ -7,6 +7,8 @@ read target
 echo "Enter provider config filename[Press enter if none]:"
 read pc
 
+org=${target%%.*}
+
 mkdir $program 
 cd $program
 
