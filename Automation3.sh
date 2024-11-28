@@ -7,12 +7,17 @@ read target
 echo "Enter provider config filename[Press enter if none]:"
 read pc
 
+org=${target%%.*}
+
 mkdir $program 
 cd $program
 
 mkdir $target
 cd $target
 
+
+echo "[*] Checking for Subdomain Takeover ..."
+subzy run --targets allsub.txt | tee -a Subdomaintakeover.txt
 
 echo "[*] Checking for SQLi using Nuclei fuzzing templates..."
 nuclei -l gfsqli.txt -v -t ~/nuclei-templates/fuzzing-templates/sqli -o nucleifuzzsqli.txt | notify -pc ~/Documents/BugBounty/$pc
