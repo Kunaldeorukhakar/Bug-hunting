@@ -22,7 +22,7 @@ curl -s -A "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (
 
 echo "[*] Finding subdomains..."
 subfinder -d $target -t 100 -v -o allsub.txt
-python3 ~/Documents/tools/github-subdomains.py -t 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 -d $target | anew allsub.txt
+github-subdomains -t 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 -d $target -raw | anew allsub.txt
 
 
 echo "[*] Checking for alive targets using httpx..."
@@ -30,7 +30,8 @@ cat allsub.txt | httpx -t 100 | tee -a probedsub.txt
 httpx -status-code -title -tech-detect -cl -list allsub.txt -t 100 -o httpx.txt
 
 echo "[*] Fetching all the URLs using katana and performing pattern matching..."
-katana -u allsub.txt -d 5 -ps -pss waybackarchive,commoncrawl,alienvault -kf -jc -fx -ef woff,css,png,svg,jpg,woff2,jpeg,gif,svg -o allurls.txt
+katana -u allsub.txt -d 3 -kf -jc -ef woff,css,png,svg,jpg,woff2,jpeg,gif,svg -threads 100 -o allurls.txt
+cat allsub.txt| gau --verbose --threads 10 | grep -vE '\.(woff|css|png|svg|jpg|woff2|jpeg|gif|svg)$' | anew allurls.txt
 cat allurls.txt | grep -E "\.js$" | grep -vE "jquery|momentjs|bootstrap|lodash|polyfills|angular|modernizr|react|vue|backbone|ember|knockout|meteor|node|express|socket.io|d3|highcharts|leaflet|phaser" | anew | tee -a js.txt
 cat allurls.txt | gf xss | tee -a gfxss.txt
 cat allurls.txt | gf sqli | tee -a gfsqli.txt
@@ -41,7 +42,7 @@ cat allurls.txt | gf idor | tee -a gfidor.txt
 cat allurls.txt | gf redirect | tee -a gfredirect.txt
 
 echo "[*] Fetching all the ip's from hosts and shodan..."
-while read -r domain; do dig +short "$domain"  | grep -Eo '([0-9]{1,3}\.){3}[0-9]{1,3}'; done < allsub.txt | sort -u > ips.txt
+while read -r domain; do dig +short "$domain"  | grep -Eo '([0-9]{1,3}\.){3}[0-9]{1,3}'; done < allsub.txt | anew ips.txt
 python3 ~/Documents/tools/freedan/freedan.py -S $target | anew ips.txt
 
 
