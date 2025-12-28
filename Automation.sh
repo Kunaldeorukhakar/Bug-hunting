@@ -22,7 +22,7 @@ curl -s -A "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (
 
 echo "[*] Finding subdomains..."
 subfinder -d $target -t 100 -v -o allsub.txt
-github-subdomains -t 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 -d $target -raw | anew allsub.txt
+github-subdomains -t $githubtoken -d $target -raw | anew allsub.txt
 
 
 echo "[*] Checking for alive targets using httpx..."
