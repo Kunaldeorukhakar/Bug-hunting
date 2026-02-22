@@ -17,7 +17,7 @@ cd $target
 
 
 echo "[*] Scanning and finding new subdomains..."
-subfinder -d $target -t 100 -v;github-subdomains -t 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 -d $target | anew  allsub.txt |tee -a newsubdomain_$(date +"%d;%m;%Y_%H;%M;%S").txt | notify -pc ~/Documents/BugBounty/$pc | tee -a allsub.txt
+subfinder -d $target -t 100 -v;github-subdomains -t $github_token -d $target | anew  allsub.txt |tee -a newsubdomain_$(date +"%d;%m;%Y_%H;%M;%S").txt | notify -pc ~/Documents/BugBounty/$pc | tee -a allsub.txt
 
 echo "[*] Scanning for any changes in applications/servers..."
 httpx -status-code -title -tech-detect -cl -list allsub.txt | anew httpx.txt |tee -a newhttpx_$(date +"%d;%m;%Y_%H;%M;%S").txt | notify -pc ~/Documents/BugBounty/$pc | tee -a httpx.txt
